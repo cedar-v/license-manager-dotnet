@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>LicenseManager.DotNet</RootNamespace>
+    <PackageId>LicenseManager.DotNet</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>ThingsPanel</Authors>
+    <Company>ThingsPanel</Company>
+    <Description>License Manager .NET SDK for online activation, local license validation, and heartbeat synchronization.</Description>
+    <PackageTags>license;activation;sdk</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryType>git</RepositoryType>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+</Project>
