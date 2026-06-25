@@ -30,7 +30,7 @@ var config = new LicenseClientConfig
 
     // 硬件指纹字段用于把许可证绑定到当前设备。
     // 字段越多绑定越严格，但硬件变化后越可能需要重新激活。
-    HardwareFields = ["mac", "hostname", "cpu"],
+    HardwareFields = new List<string> { "mac", "hostname", "cpu" },
 
     // demo 默认 10 秒心跳，方便观察；生产环境按后台策略配置。
     HeartbeatIntervalSeconds = int.TryParse(Environment.GetEnvironmentVariable("LICENSE_HEARTBEAT_SECONDS"), out var heartbeatSeconds)

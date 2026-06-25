@@ -51,7 +51,11 @@ public sealed class LicenseClient : IDisposable
         LicenseClientOptions? options = null,
         CancellationToken cancellationToken = default)
     {
-        ArgumentNullException.ThrowIfNull(config);
+        if (config is null)
+        {
+            throw new ArgumentNullException(nameof(config));
+        }
+
         config.Validate();
 
         var publicKey = LoadStoredPublicKey(config.StoragePath) ?? config.PublicKeyPem;

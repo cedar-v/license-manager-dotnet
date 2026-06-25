@@ -18,7 +18,7 @@ public sealed class LicenseClientConfig
 
     public string LicenseFilePath { get; set; } = "";
 
-    public byte[] PublicKeyPem { get; set; } = [];
+    public byte[] PublicKeyPem { get; set; } = Array.Empty<byte>();
 
     public string PublicKeyPath { get; set; } = "";
 
@@ -30,15 +30,15 @@ public sealed class LicenseClientConfig
 
     public string StoragePath { get; set; } = "";
 
-    public byte[] StorageSecret { get; set; } = [];
+    public byte[] StorageSecret { get; set; } = Array.Empty<byte>();
 
-    public List<string> HardwareFields { get; set; } = [];
+    public List<string> HardwareFields { get; set; } = new List<string>();
 
-    public Dictionary<string, object?> DeviceInfo { get; set; } = [];
+    public Dictionary<string, object?> DeviceInfo { get; set; } = new Dictionary<string, object?>();
 
-    public Dictionary<string, object?> Metadata { get; set; } = [];
+    public Dictionary<string, object?> Metadata { get; set; } = new Dictionary<string, object?>();
 
-    public Dictionary<string, string> HttpHeaders { get; set; } = [];
+    public Dictionary<string, string> HttpHeaders { get; set; } = new Dictionary<string, string>();
 
     public void Validate()
     {

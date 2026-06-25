@@ -18,7 +18,7 @@ public sealed class DefaultHardwareProvider : IHardwareProvider
             .Distinct()
             .ToArray();
 
-        this.fields = normalized is { Length: > 0 } ? normalized : ["mac", "hostname"];
+        this.fields = normalized is { Length: > 0 } ? normalized : new[] { "mac", "hostname" };
     }
 
     public Task<HardwareFingerprint> GetFingerprintAsync(CancellationToken cancellationToken = default)
@@ -68,8 +68,14 @@ public sealed class DefaultHardwareProvider : IHardwareProvider
             builder.Append(';');
         }
 
-        var hash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(builder.ToString()))).ToLowerInvariant();
+        var hash = Convert.ToHexString(Sha256(Encoding.UTF8.GetBytes(builder.ToString()))).ToLowerInvariant();
         return Task.FromResult(new HardwareFingerprint(hash, data));
+    }
+
+    private static byte[] Sha256(byte[] source)
+    {
+        using var sha = SHA256.Create();
+        return sha.ComputeHash(source);
     }
 
     private static string GetMacAddress()

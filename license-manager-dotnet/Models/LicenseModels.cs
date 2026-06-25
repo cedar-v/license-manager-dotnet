@@ -42,16 +42,16 @@ public sealed class LicensePayload
     public int? MaxActivations { get; set; }
 
     [JsonPropertyName("custom_parameters")]
-    public Dictionary<string, JsonElement> CustomParameters { get; set; } = [];
+    public Dictionary<string, JsonElement> CustomParameters { get; set; } = new Dictionary<string, JsonElement>();
 
     [JsonPropertyName("feature_config")]
-    public Dictionary<string, JsonElement> FeatureConfig { get; set; } = [];
+    public Dictionary<string, JsonElement> FeatureConfig { get; set; } = new Dictionary<string, JsonElement>();
 
     [JsonPropertyName("usage_limits")]
-    public Dictionary<string, JsonElement> UsageLimits { get; set; } = [];
+    public Dictionary<string, JsonElement> UsageLimits { get; set; } = new Dictionary<string, JsonElement>();
 
     [JsonIgnore]
-    public Dictionary<string, JsonElement> Extras { get; set; } = [];
+    public Dictionary<string, JsonElement> Extras { get; set; } = new Dictionary<string, JsonElement>();
 
     [JsonPropertyName("activated_at")]
     public DateTimeOffset? ActivatedAt { get; set; }
@@ -94,10 +94,10 @@ public sealed class ActivateRequest
     public string? SoftwareVersion { get; set; }
 
     [JsonPropertyName("device_info")]
-    public Dictionary<string, object?> DeviceInfo { get; set; } = [];
+    public Dictionary<string, object?> DeviceInfo { get; set; } = new Dictionary<string, object?>();
 
     [JsonPropertyName("metadata")]
-    public Dictionary<string, object?> Metadata { get; set; } = [];
+    public Dictionary<string, object?> Metadata { get; set; } = new Dictionary<string, object?>();
 }
 
 public sealed class ActivateResponse
@@ -132,7 +132,7 @@ public sealed class HeartbeatRequest
 
     [JsonPropertyName("usage_data")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-    public Dictionary<string, object?> UsageData { get; set; } = [];
+    public Dictionary<string, object?> UsageData { get; set; } = new Dictionary<string, object?>();
 
     [JsonPropertyName("config_updated_at")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

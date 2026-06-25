@@ -1,8 +1,12 @@
 # LicenseManager.DotNet
 
-License Manager .NET SDK for online activation, local license validation, and heartbeat synchronization.
+License Manager 的 .NET SDK，提供在线激活、本地许可证校验以及心跳同步能力。
 
-## Basic Usage
+## 支持的 .NET 版本
+
+- .NET 6.0 及以上版本（`net6.0`）
+
+## 基本用法
 
 ```csharp
 using LicenseManager.DotNet;
@@ -15,7 +19,7 @@ var config = new LicenseClientConfig
     Version = "1.0.0",
     AuthorizationCode = "activation-code",
     LicenseFilePath = "license_code/license.lic",
-    HardwareFields = ["mac", "hostname", "cpu"]
+    HardwareFields = new[] { "mac", "hostname", "cpu" }
 };
 
 using var client = await LicenseClient.CreateAsync(config);
@@ -24,4 +28,4 @@ client.Validate();
 var license = client.CurrentLicense();
 ```
 
-The first online activation returns both the public key and license file. The SDK caches them locally for later startup validation.
+首次在线激活会同时返回公钥（`public_key`）和许可证文件（`license_file`），SDK 会将它们缓存到本地，用于后续启动时的离线校验。

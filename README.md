@@ -1,19 +1,23 @@
 # license-manager-dotnet
 
-License Manager .NET SDK for online activation, local license validation, and heartbeat synchronization.
+License Manager 的 .NET SDK，提供在线激活、本地许可证校验以及心跳同步能力。
 
-## Projects
+## 支持的 .NET 版本
 
-- `license-manager-dotnet`: core SDK library.
-- `demo`: console demo for validating the SDK integration flow.
+- .NET 6.0 及以上版本（`net6.0`）
 
-## Build
+## 项目结构
+
+- `license-manager-dotnet`：核心 SDK 库。
+- `demo`：控制台示例，用于演示 SDK 的完整接入流程。
+
+## 构建
 
 ```powershell
 dotnet build .\license-manager-dotnet.sln
 ```
 
-## Pack
+## 打包
 
 ```powershell
 dotnet pack .\license-manager-dotnet\license-manager-dotnet.csproj -c Release

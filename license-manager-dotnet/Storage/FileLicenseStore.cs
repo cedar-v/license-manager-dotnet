@@ -3,10 +3,17 @@ using LicenseManager.DotNet.Abstractions;
 
 namespace LicenseManager.DotNet.Storage;
 
-public sealed class FileLicenseStore(string path, byte[]? secret = null) : ILicenseStore
+public sealed class FileLicenseStore : ILicenseStore
 {
-    private static readonly byte[] EncryptedPrefix = "enc:"u8.ToArray();
-    private readonly byte[] secret = secret ?? [];
+    private static readonly byte[] EncryptedPrefix = System.Text.Encoding.ASCII.GetBytes("enc:");
+    private readonly string path;
+    private readonly byte[] secret;
+
+    public FileLicenseStore(string path, byte[]? secret = null)
+    {
+        this.path = path;
+        this.secret = secret ?? Array.Empty<byte>();
+    }
 
     public async Task SaveAsync(byte[] data, CancellationToken cancellationToken = default)
     {
@@ -50,12 +57,12 @@ public sealed class FileLicenseStore(string path, byte[]? secret = null) : ILice
             return data;
         }
 
-        var key = SHA256.HashData(secret);
+        var key = Sha256(secret);
         var nonce = RandomNumberGenerator.GetBytes(12);
         var ciphertext = new byte[data.Length];
         var tag = new byte[16];
 
-        using var aes = new AesGcm(key, tag.Length);
+        using var aes = new AesGcm(key);
         aes.Encrypt(nonce, data, ciphertext, tag);
 
         var raw = new byte[nonce.Length + ciphertext.Length + tag.Length];
@@ -63,7 +70,11 @@ public sealed class FileLicenseStore(string path, byte[]? secret = null) : ILice
         Buffer.BlockCopy(ciphertext, 0, raw, nonce.Length, ciphertext.Length);
         Buffer.BlockCopy(tag, 0, raw, nonce.Length + ciphertext.Length, tag.Length);
 
-        return [.. EncryptedPrefix, .. System.Text.Encoding.ASCII.GetBytes(Convert.ToBase64String(raw))];
+        var encoded = System.Text.Encoding.ASCII.GetBytes(Convert.ToBase64String(raw));
+        var result = new byte[EncryptedPrefix.Length + encoded.Length];
+        Buffer.BlockCopy(EncryptedPrefix, 0, result, 0, EncryptedPrefix.Length);
+        Buffer.BlockCopy(encoded, 0, result, EncryptedPrefix.Length, encoded.Length);
+        return result;
     }
 
     private byte[] DecryptIfNeeded(byte[] data)
@@ -80,7 +91,7 @@ public sealed class FileLicenseStore(string path, byte[]? secret = null) : ILice
             throw new InvalidOperationException("storage: decrypt: encrypted payload is invalid");
         }
 
-        var key = SHA256.HashData(secret);
+        var key = Sha256(secret);
         var nonce = raw.AsSpan(0, 12);
         var tag = raw.AsSpan(raw.Length - 16, 16);
         var ciphertext = raw.AsSpan(12, raw.Length - 12 - 16);
@@ -88,7 +99,7 @@ public sealed class FileLicenseStore(string path, byte[]? secret = null) : ILice
 
         try
         {
-            using var aes = new AesGcm(key, tag.Length);
+            using var aes = new AesGcm(key);
             aes.Decrypt(nonce, ciphertext, tag, plaintext);
             return plaintext;
         }
@@ -96,5 +107,11 @@ public sealed class FileLicenseStore(string path, byte[]? secret = null) : ILice
         {
             throw new InvalidOperationException($"storage: decrypt: {ex.Message}", ex);
         }
+    }
+
+    private static byte[] Sha256(byte[] source)
+    {
+        using var sha = SHA256.Create();
+        return sha.ComputeHash(source);
     }
 }

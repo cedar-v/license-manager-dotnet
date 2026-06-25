@@ -77,7 +77,7 @@ public sealed class LicenseValidator : IDisposable
                 ?? throw new InvalidOperationException("payload is empty");
 
             var extras = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(payloadBytes, LicenseJson.Options);
-            payload.Extras = extras ?? [];
+            payload.Extras = extras ?? new Dictionary<string, JsonElement>();
         }
         catch (Exception ex)
         {
